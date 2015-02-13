@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hightml;
+package com.hightml.scanman.value;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

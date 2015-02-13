@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hightml;
+package com.hightml.scanman;
 
 /**
  * @author Marcel

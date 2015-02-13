@@ -1,4 +1,4 @@
-package com.hightml;
+package com.hightml.scanman.value;
 
 /**
  * Please enter description here.
