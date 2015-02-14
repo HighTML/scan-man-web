@@ -9,6 +9,7 @@ import org.apache.pdfbox.exceptions.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.PDFTextStripperByArea;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,17 +37,22 @@ public class Scan {
 
 
     File file;
-    String absoluteFilename;
     String ocrText = "";
     List<String> keywordSuggestions;
 
     List<Category> categorySuggestions;
 
+    URL url;
 
+
+
+
+    /**
+     * Filename can be absolute or relative from project basedir
+     * @param filename
+     */
     public Scan(String filename) {
         file = new File(filename);
-        log.debug(file.getAbsolutePath());
-        absoluteFilename = file.getAbsolutePath();
         ocrText = "Hellodeug eiuewyh ";
         keywordSuggestions = new ArrayList<>();
         keywordSuggestions.add("hypotheek");
