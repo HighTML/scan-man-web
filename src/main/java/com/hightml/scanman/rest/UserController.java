@@ -9,7 +9,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 import java.util.List;
 
 import com.hightml.scanman.value.User;
-import com.hightml.scanman.UserRepository;
+import com.hightml.scanman.jpa.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

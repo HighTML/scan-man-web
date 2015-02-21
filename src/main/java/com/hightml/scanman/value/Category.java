@@ -10,74 +10,100 @@ package com.hightml.scanman.value;
  * Copyright by HighTML.
  */
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 
-import java.io.File;
-import java.io.IOException;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Slf4j
+@Entity
+@RequiredArgsConstructor
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+//@ToString(exclude = "parent", includeFieldNames = true)
 public class Category {
-    private List<Category> childCategories;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
+
+
+
+    @JsonIgnore
+    @ManyToOne
     private Category parent;
+
+    @Transient
+    private Integer parentId;
+
+
+    @NonNull
     private String displayName;
+
     private String explanation;
+
+    @NonNull
+    @Column(unique = true)
     private String code;
 
-    public static List<Category> readFromXML(String fileName) {
-        SAXBuilder builder = new SAXBuilder();
-        File xmlFile = new File(fileName);
+    private String directory; // if scan is physically moved, to which directory
 
-        List<Category> categories = new ArrayList<>();
-
-        try {
-
-            Document document = builder.build(xmlFile);
-            Element rootNode = document.getRootElement();
-            List<Element> list = rootNode.getChildren("category");
-
-            categories = processCategories(list);
+    @OneToMany(targetEntity = Keyword.class, mappedBy = "category", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Keyword> categoryKeywords; // excluding those of parent, those are implicit
 
 
-        } catch (IOException | JDOMException io) {
-            log.error("During reading XML", io);
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Category> childCategories;
+
+
+
+    @Override
+    public String toString() {
+        if (parent != null) {
+            return code + "(" + parent.toString() + ")";
+        } else {
+            return code;
         }
-
-        return categories;
     }
 
-    private static List<Category> processCategories(List<Element> list) {
-        List<Category> categories = new ArrayList<>();
-        for (Element node : list) {
-            Category category = processCategory(node);
-            categories.add(category);
+    public Integer getParentId() {
+        if (parent != null) {
+            return parent.getId();
+        } else {
+            return null;
         }
-        return categories;
     }
 
-    private static Category processCategory(Element node) {
-        Category category = new Category();
-        category.setDisplayName(node.getChildText("display-name"));
-        category.setCode(node.getChildText("code"));
-        category.setExplanation(node.getChildText("explanetion"));
 
-        List<Element> list = node.getChildren("category");
-        if (list != null) {
-            category.setChildCategories(processCategories(list));
-        }
-
-        return category;
+    public void setParent(Category parent) {
+        log.debug(this + " setParent(" + parent + ")");
+        this.parent = parent;
+        parent.addChildCategory(this);
     }
 
+    public void addChildCategory(Category child) {
+        log.debug(this + " addChild(" + child + ")");
+        if (childCategories == null) {
+            childCategories = new ArrayList<>();
+        }
+        childCategories.add(child);
+    }
+
+
+
+    public void setCategoryKeywords(List<String> keys) {
+        categoryKeywords = new ArrayList<>();
+        for (String s : keys) {
+            categoryKeywords.add(new Keyword(this, s));
+        }
+    }
 
 }
 

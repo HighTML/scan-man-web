@@ -3,11 +3,9 @@
  */
 package com.hightml.scanman.rest;
 
-import com.hightml.scanman.ScanRepository;
-import com.hightml.scanman.UserRepository;
+import com.hightml.scanman.jpa.ScanRepository;
 import com.hightml.scanman.value.Scan;
-import com.hightml.scanman.value.User;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,7 +29,7 @@ public class ScanController {
 		return ScanRepository.findAll();
 	}
 
-    @RequestMapping(value="/scan", method=GET)
+    @RequestMapping(value="scan", method=GET)
     public Scan getScan(String f) {
         return ScanRepository.getOne(f);
     }

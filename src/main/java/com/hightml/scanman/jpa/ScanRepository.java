@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hightml.scanman;
+package com.hightml.scanman.jpa;
 
 import com.hightml.scanman.value.Category;
 import com.hightml.scanman.value.Scan;

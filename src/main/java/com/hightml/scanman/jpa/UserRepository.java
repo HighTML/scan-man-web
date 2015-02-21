@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hightml.scanman;
+package com.hightml.scanman.jpa;
 
 import com.hightml.scanman.value.User;
 import org.springframework.data.jpa.repository.JpaRepository;
