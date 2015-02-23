@@ -1,15 +1,13 @@
 package com.hightml.scanman.value;
 
-import com.hightml.scanman.value.Category;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.exceptions.CryptographyException;
-import org.apache.pdfbox.exceptions.InvalidPasswordException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.util.PDFTextStripper;
-import org.apache.pdfbox.util.PDFTextStripperByArea;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,6 +16,7 @@ import javax.persistence.Id;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,53 +29,37 @@ import java.util.List;
  * <p>
  * Copyright by HighTML.
  */
-@Getter
-@Setter
+@Data
 @Slf4j
+@Entity
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Scan {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-    File file;
+
+
+    String lastRelativeFilename; // relative from root of document repository (e.g. DropBox root)
+
     String ocrText = "";
-    List<String> keywordSuggestions;
+    List<Keyword> containsKeywords;
 
     List<Category> categorySuggestions;
 
-    URL url;
+
+    LocalDateTime createdDate;
 
 
 
+    public Scan(String lastRelativeFilename) {
+        this.lastRelativeFilename = lastRelativeFilename;
+        File f = new File(lastRelativeFilename);
 
-    /**
-     * Filename can be absolute or relative from project basedir
-     * @param filename
-     */
-    public Scan(String filename) {
-        file = new File(filename);
-        ocrText = "Hellodeug eiuewyh ";
-        keywordSuggestions = new ArrayList<>();
-        keywordSuggestions.add("hypotheek");
+
     }
 
-    public Scan readText() {
-        try {
-            PDDocument document = PDDocument.load(file);
-            document.getClass();
-            if (document.isEncrypted()) {
-                document.decrypt("");
-            }
 
-
-            PDFTextStripper stripper = new PDFTextStripper();
-            ocrText = stripper.getText(document);
-
-            return this;
-        } catch (CryptographyException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return this;
-    }
 }

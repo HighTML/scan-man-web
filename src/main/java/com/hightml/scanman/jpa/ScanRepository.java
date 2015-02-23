@@ -20,21 +20,9 @@ import java.util.List;
  *
  */
 
-public class ScanRepository {
+public interface ScanRepository extends JpaRepository<Scan, Integer> {
 
 
 
-    public static List<Scan> findAll() {
-        List<Scan> scans = new ArrayList<>();
-        scans.add(new Scan("src/test/resources/sample-scan.pdf"));
-        return scans;
-    }
 
-
-    public static Scan getOne(String f) {
-        Scan scan = new Scan("src/test/resources/sample-scan.pdf");
-        scan.readText();
-
-        return scan;
-    }
 }
