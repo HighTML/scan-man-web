@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hightml.scanman.rest;
+package com.hightml.scanman.controllers;
 
 import com.hightml.scanman.jpa.ScanRepository;
 import com.hightml.scanman.value.Scan;

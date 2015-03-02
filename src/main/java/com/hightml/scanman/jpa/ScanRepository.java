@@ -3,16 +3,10 @@
  */
 package com.hightml.scanman.jpa;
 
-import com.hightml.scanman.value.Category;
 import com.hightml.scanman.value.Scan;
-import com.hightml.scanman.value.User;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +15,17 @@ import java.util.List;
  */
 
 public interface ScanRepository extends JpaRepository<Scan, Integer> {
+
+    public Scan findById(int id);
+
+    public Scan findByDigest(String digest);
+
+
+    public final static String FIND_NEW_QUERY = "SELECT s FROM Scan s WHERE s.flattenedToImageFile = false";
+
+    @Query(FIND_NEW_QUERY)
+    public List<Scan> findAllNewScans();
+
 
 
 

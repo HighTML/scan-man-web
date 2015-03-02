@@ -1,0 +1,58 @@
+
+
+#) Category uit database
+
+#) CRUD app voor Category
+
+#) Category database vullen
+
+#) Scans uit database (file md5 is id)
+ - kan meerdere files hebben, zelfde md5 (= kopie)
+ - <md5>_s.png <md5>_m.png <md5>_l.png
+
+#) Lucene op ocr text,  filebased index
+
+#) Tesseract / Tess4j integreren => zelf OCR doen
+
+#) Handmatig starten parsen van directory
+
+#) Watch Directory voor nieuwe uploads
+  http://stackoverflow.com/questions/23452527/watching-a-directory-for-changes-in-java
+
+#) Integratie DropBox / OneDrive API
+
+#) Run on Docker
+   http://www.alexecollins.com/docker-maven-plugin/
+
+
+
+
+
+
+
+
+
+
+import org.apache.commons.io.IOUtils;
+final byte[] data = IOUtils.toByteArray(  ... InputStream.class  );
+
+Document file = new Document(name, 0, data);
+
+private String getFileExtensionInLowerCase(final String fileName) {
+        return FilenameUtils.getExtension(fileName).toLowerCase();
+}
+
+
+final String fileExtension = getFileExtensionInLowerCase(file.getFilename());
+            if ("pdf".equals(fileExtension)) {
+                convertedPngFiles.addAll(this.pdfToPngConverter.convert(file));
+            } else {
+                convertedPngFiles.add(this.imageToPngConverter.convert(file, source));
+            }
+
+
+Document convertedPdfFile = this.uploadedFileConversionService.convertUploadedFilesToSinglePdf(uploadDocumentsRequest, source);
+
+
+
+

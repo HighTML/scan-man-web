@@ -1,4 +1,4 @@
-package com.hightml.scanman.rest;
+package com.hightml.scanman.controllers;
 
 
 import java.io.File;

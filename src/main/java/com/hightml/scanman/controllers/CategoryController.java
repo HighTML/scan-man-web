@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hightml.scanman.rest;
+package com.hightml.scanman.controllers;
 
 import com.hightml.scanman.jpa.CategoryRepository;
 import com.hightml.scanman.value.Category;
@@ -24,7 +24,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Slf4j
 public class CategoryController {
 	
-	@Autowired private CategoryRepository categoryRepository;
+	@Autowired
+    private CategoryRepository categoryRepository;
 
 	@RequestMapping(value="", method=GET)
 	public List<Category> getCategories() {

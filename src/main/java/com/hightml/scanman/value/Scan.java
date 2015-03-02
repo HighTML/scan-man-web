@@ -3,22 +3,15 @@ package com.hightml.scanman.value;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.exceptions.CryptographyException;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.util.PDFTextStripper;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import javax.persistence.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+
+import static com.hightml.scanman.Application.*;
 
 /**
  * Please enter description here.
@@ -44,22 +37,45 @@ public class Scan {
 
     String lastRelativeFilename; // relative from root of document repository (e.g. DropBox root)
 
+    @Column(unique = true)
+    String digest;
+
+    @Transient
+    Path file;
+
     String ocrText = "";
+
+    @OneToMany(targetEntity = Keyword.class, fetch = FetchType.EAGER)
     List<Keyword> containsKeywords;
 
+
+    @OneToMany(targetEntity = Category.class, fetch = FetchType.EAGER)
     List<Category> categorySuggestions;
 
 
-    LocalDateTime createdDate;
+    LocalDateTime scanCreatedDate;
 
+
+    LocalDateTime scanProcessedDate;
+
+    int nrPages;
+
+
+    private boolean flattenedToImageFile;
 
 
     public Scan(String lastRelativeFilename) {
         this.lastRelativeFilename = lastRelativeFilename;
-        File f = new File(lastRelativeFilename);
-
+        file =
+                FileSystems.getDefault().getPath(SCAN_DIRECTORY, lastRelativeFilename);
 
     }
+
+    public Scan(Path file) {
+        this.lastRelativeFilename = file.toString();
+        this.file = file;
+    }
+
 
 
 }

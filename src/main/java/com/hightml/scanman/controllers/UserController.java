@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.hightml.scanman.rest;
+package com.hightml.scanman.controllers;
 
 import static org.springframework.http.MediaType.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
