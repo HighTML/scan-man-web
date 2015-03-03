@@ -1,9 +1,11 @@
 package com.hightml.scanman.processing;
 
 import com.google.common.hash.Hashing;
+import com.hightml.scanman.Application;
 import com.hightml.scanman.Utils;
 import com.hightml.scanman.jpa.ScanRepository;
 import com.hightml.scanman.value.Scan;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +18,6 @@ import java.util.List;
 
 import static java.nio.file.FileVisitResult.CONTINUE;
 
-import static com.hightml.scanman.Application.*;
-
 /**
  * Please enter description here.
  * <p>
@@ -28,7 +28,9 @@ import static com.hightml.scanman.Application.*;
  * Copyright by HighTML.
  */
 @Component
+@Slf4j
 public class ScanProcessor {
+
 
     @Autowired
     private ScanRepository scanRepository;
@@ -44,14 +46,19 @@ public class ScanProcessor {
 
         List<Scan> scans = scanRepository.findAllNewScans();
         for (Scan scan : scans) {
-            scanToTextConverter.addOcrText(scan);
+            try {
+                scanToImageConverter.generatePngs(scan);
+            } catch (ProcessingException e) {
+                 log.debug("During generate PNGS", e.getCause());
+            }
+//            scanToTextConverter.addOcrText(scan);
             scanRepository.save(scan);
         }
     }
 
 
     public void saveNewScans() throws IOException {
-        Path startingDir = FileSystems.getDefault().getPath(SCAN_DIRECTORY, "src/test/resources");
+        Path startingDir = FileSystems.getDefault().getPath(Application.SCAN_DIRECTORY);
         SaveNewScanFiles pf = new SaveNewScanFiles("*.pdf");
         Files.walkFileTree(startingDir, pf);
     }

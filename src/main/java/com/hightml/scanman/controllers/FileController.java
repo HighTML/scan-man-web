@@ -4,6 +4,7 @@
 package com.hightml.scanman.controllers;
 
 
+import com.hightml.scanman.Application;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,13 +29,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class FileController {
 
 
-    @Value("${scan.image.files.root}")
-    String IMAGEROOT;
 
     @ResponseBody
     @RequestMapping(value="/{fileName:.+}", method = RequestMethod.GET, produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] getFile(@PathVariable("fileName") String fileName) {
-        Path path = FileSystems.getDefault().getPath(IMAGEROOT, fileName);
+        Path path = FileSystems.getDefault().getPath(Application.IMAGEROOT, fileName);
         try {
             return Files.readAllBytes(path);
         } catch (IOException e) {

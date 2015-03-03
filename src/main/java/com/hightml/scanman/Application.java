@@ -14,6 +14,7 @@ import com.hightml.scanman.value.Keyword;
 import com.sun.jna.Native;
 import lombok.extern.slf4j.Slf4j;
 import net.sourceforge.tess4j.TessAPI;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -30,7 +31,21 @@ import java.util.Arrays;
 @ComponentScan
 @Slf4j
 public class Application {
-    public final static String SCAN_DIRECTORY = (new File(".")).getAbsolutePath();
+
+    @Value("${scan.pdf.files.root}")
+    public void setSCAN_DIRECTORY(String scan_directory) {
+        SCAN_DIRECTORY = scan_directory;
+    }
+    static public String SCAN_DIRECTORY;
+
+
+
+    @Value("${scan.image.files.root}")
+    public void setIMAGEROOT(String imageroot) {
+        IMAGEROOT = imageroot;
+    }
+    static public String IMAGEROOT;
+
 
 
     public static void main(String[] args) throws Exception {
@@ -65,7 +80,6 @@ public class Application {
 
         System.out.println();
 
-        log.debug(SCAN_DIRECTORY);
 
 
     }

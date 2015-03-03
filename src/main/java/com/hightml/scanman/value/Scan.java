@@ -1,17 +1,17 @@
 package com.hightml.scanman.value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.hightml.scanman.Application;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static com.hightml.scanman.Application.*;
 
 /**
  * Please enter description here.
@@ -32,6 +32,7 @@ public class Scan {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
 
 
 
@@ -58,7 +59,9 @@ public class Scan {
 
     LocalDateTime scanProcessedDate;
 
-    int nrPages;
+    long nrPages;
+
+    long byteSize;
 
 
     private boolean flattenedToImageFile;
@@ -67,7 +70,7 @@ public class Scan {
     public Scan(String lastRelativeFilename) {
         this.lastRelativeFilename = lastRelativeFilename;
         file =
-                FileSystems.getDefault().getPath(SCAN_DIRECTORY, lastRelativeFilename);
+                FileSystems.getDefault().getPath(Application.SCAN_DIRECTORY, lastRelativeFilename);
 
     }
 
